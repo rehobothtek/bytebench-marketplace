@@ -347,7 +347,7 @@ the values below are just the development fallback defaults.
 | `ALLOWED_HOSTS` | Your real domain(s) in production |
 | `DATABASE_URL` | Set this to use PostgreSQL; otherwise SQLite is used |
 | `SITE_URL` | Your public origin, e.g. `https://rehobothtek.com` — powers the canonical and Open Graph URLs. Unset locally |
-| `WHATSAPP_NUMBER` | Where checkout/repair WhatsApp links go |
+| `WHATSAPP_NUMBER` / `SMS_NUMBER` | Where checkout/repair WhatsApp links and contact-form SMS links go |
 | `SITE_EMAIL` / `ADMIN_NOTIFY_EMAIL` | Where automatic order/repair emails land |
 | `TELEGRAM_USERNAME` | Contact page Telegram link |
 | `SHOP_ADDRESS` | Powers the embedded Google Map and directions link |

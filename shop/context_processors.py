@@ -67,6 +67,7 @@ def site_info(request):
         'wishlist_count': get_wishlist(request).count(),
         'compare_count': get_compare(request).count(),
         'WHATSAPP_NUMBER': settings.WHATSAPP_NUMBER,
+        'SMS_NUMBER': settings.SMS_NUMBER,
         'SITE_NAME': settings.SITE_NAME,
         'SITE_TAGLINE': settings.SITE_TAGLINE,
         'SITE_EMAIL': settings.SITE_EMAIL,

@@ -330,16 +330,16 @@ class CompareItemAdmin(admin.ModelAdmin):
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'phone_number', 'message_preview', 'is_read', 'created_at')
-    list_filter = ('is_read',)
+    list_display = ('name', 'contact_channel', 'email', 'phone_number', 'message_preview', 'is_read', 'created_at')
+    list_filter = ('contact_channel', 'is_read',)
     search_fields = ('name', 'email', 'phone_number', 'message')
     list_editable = ('is_read',)
-    readonly_fields = ('name', 'email', 'phone_number', 'message', 'created_at')
+    readonly_fields = ('name', 'email', 'phone_number', 'message', 'contact_channel', 'created_at')
     date_hierarchy = 'created_at'
     ordering = ('-created_at',)
     fieldsets = (
         ('Message', {
-            'fields': ('name', 'email', 'phone_number', 'message', 'created_at'),
+            'fields': ('name', 'email', 'phone_number', 'contact_channel', 'message', 'created_at'),
             'description': 'What the customer submitted — kept read-only so the record of it cannot '
                            'be edited after the fact.',
         }),

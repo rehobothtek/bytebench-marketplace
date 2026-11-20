@@ -11,7 +11,7 @@
         <div class="section-eyebrow">Get in touch</div>
         <h2>Contact us</h2>
       </div>
-      <p>Reach us however's easiest — WhatsApp, Telegram, text, or email. Or use the form for anything else.</p>
+      <p>Send us your message and your details. It goes straight to our email inbox and we will reply as soon as possible.</p>
     </div>
 
     <div class="contact-grid">
@@ -35,7 +35,7 @@
             {{ form.email.errors }}
           </div>
           <div class="field">
-            <label for="{{ form.phone_number.id_for_label }}">Phone (optional)</label>
+            <label for="{{ form.phone_number.id_for_label }}">Phone / WhatsApp number</label>
             {{ form.phone_number }}
             {{ form.phone_number.errors }}
           </div>
@@ -59,7 +59,7 @@
           <div class="name">Telegram</div>
           <div class="desc">@{{ TELEGRAM_USERNAME }}</div>
         </a>
-        <a class="contact-card" href="sms:+{{ WHATSAPP_NUMBER }}">
+        <a class="contact-card" href="sms:+{{ SMS_NUMBER }}">
           <div class="badge" style="margin:0 0 12px;">💬</div>
           <div class="name">Text / SMS</div>
           <div class="desc">No WhatsApp? Send a text instead</div>

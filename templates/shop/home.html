@@ -1,42 +1,74 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <div class="eyebrow"><span class="led ok"></span> Open now · Ugbokolo, Benue</div>
-      <h1>Phones, laptops &amp; accessories — fixed and sold to be <em>{{ SITE_TAGLINE }}.</em></h1>
-      <p class="lead">New and trusted UK-used devices, genuine accessories, and repairs backed by a real ticket number — not a guess. Every job gets tracked from drop-off to done.</p>
-      <div class="btn-row">
-        <a href="{% url 'shop:shop' %}" class="btn btn-primary">Shop devices →</a>
-        <a href="{% url 'shop:repairs' %}" class="btn btn-ghost">Book a repair</a>
+<section class="market-hero wrap">
+  <nav class="hero-category-menu" aria-label="Shop departments">
+    <a href="{% url 'shop:shop' %}?category=phone"><span>📱</span> Phones</a>
+    <a href="{% url 'shop:shop' %}?category=laptop"><span>💻</span> Laptops</a>
+    <a href="{% url 'shop:shop' %}?category=accessory"><span>🔌</span> Accessories</a>
+    <a href="{% url 'shop:shop' %}?category=gaming"><span>🎮</span> Gaming</a>
+    <a href="{% url 'shop:repairs' %}"><span>🔧</span> Device repairs</a>
+    <a href="{% url 'shop:track' %}"><span>📦</span> Track your order</a>
+  </nav>
+  <section class="market-hero-banner hero-carousel" aria-roledescription="carousel" aria-label="Featured offers" data-hero-carousel>
+    <article class="hero-slide is-active" aria-label="Slide 1 of 3">
+      <div class="hero-slide-copy">
+        <div class="eyebrow"><span class="led ok"></span> Gadgets that work for you</div>
+        <h1>Tech deals, trusted devices, <em>all in one place.</em></h1>
+        <p>Shop phones, laptops and the accessories that keep them moving. Get dependable repairs when you need them.</p>
+        <div class="btn-row"><a href="{% url 'shop:shop' %}" class="btn btn-primary">Shop now</a><a href="{% url 'shop:repairs' %}" class="btn btn-ghost">Book a repair</a></div>
+        <div class="hero-promo-chip">✓ Genuine gadgets &nbsp; ✓ Nationwide delivery</div>
+        <div class="market-store-status"><div class="diag-head"><span class="ticket">STORE <b>OPEN TODAY</b></span><span class="led ok" aria-hidden="true"></span></div></div>
       </div>
+      <div class="hero-slide-art art-devices" aria-hidden="true"><span>⌁</span><b>TECH<br>DEALS</b></div>
+    </article>
+    <article class="hero-slide" aria-label="Slide 2 of 3" hidden>
+      <div class="hero-slide-copy">
+        <div class="eyebrow"><span class="led ok"></span> Upgrade your everyday</div>
+        <h1>Find your next <em>phone or laptop.</em></h1>
+        <p>New and carefully selected UK-used devices, clearly graded so you know exactly what you are buying.</p>
+        <div class="btn-row"><a href="{% url 'shop:shop' %}?category=phone" class="btn btn-primary">Shop phones</a><a href="{% url 'shop:shop' %}?category=laptop" class="btn btn-ghost">Shop laptops</a></div>
+        <div class="hero-promo-chip">✓ Honest condition grading &nbsp; ✓ Warranty on selected devices</div>
+        <div class="market-store-status"><div class="diag-head"><span class="ticket">STORE <b>OPEN TODAY</b></span><span class="led ok" aria-hidden="true"></span></div></div>
+      </div>
+      <div class="hero-slide-art art-phone" aria-hidden="true"><span>▯</span><b>SMART<br>CHOICES</b></div>
+    </article>
+    <article class="hero-slide" aria-label="Slide 3 of 3" hidden>
+      <div class="hero-slide-copy">
+        <div class="eyebrow"><span class="led warn"></span> Repairs you can track</div>
+        <h1>Give your device a <em>fresh start.</em></h1>
+        <p>Book a repair, receive a ticket number, and follow your device from drop-off to collection.</p>
+        <div class="btn-row"><a href="{% url 'shop:repairs' %}" class="btn btn-primary">Book a repair</a><a href="{% url 'shop:track' %}" class="btn btn-ghost">Track a repair</a></div>
+        <div class="hero-promo-chip">✓ Clear repair updates &nbsp; ✓ Expert technicians</div>
+        <div class="market-store-status"><div class="diag-head"><span class="ticket">STORE <b>OPEN TODAY</b></span><span class="led ok" aria-hidden="true"></span></div></div>
+      </div>
+      <div class="hero-slide-art art-repair" aria-hidden="true"><span>⚙</span><b>REPAIR<br>WITH CARE</b></div>
+    </article>
+    <div class="hero-carousel-controls">
+      <button type="button" class="hero-carousel-arrow" data-hero-prev aria-label="Previous offer">‹</button>
+      <div class="hero-carousel-dots" role="tablist" aria-label="Choose an offer">
+        <button type="button" role="tab" aria-label="Show offer 1" aria-selected="true" data-hero-dot="0"></button>
+        <button type="button" role="tab" aria-label="Show offer 2" aria-selected="false" data-hero-dot="1"></button>
+        <button type="button" role="tab" aria-label="Show offer 3" aria-selected="false" data-hero-dot="2"></button>
+      </div>
+      <button type="button" class="hero-carousel-arrow" data-hero-next aria-label="Next offer">›</button>
     </div>
-    <div class="diag-panel">
-      <div class="diag-head">
-        <span class="ticket">TICKET <b>#RBT-2291</b></span>
-        {# Decorative: the status of every check is spelled out in the list below. #}
-        <span class="led warn" aria-hidden="true"></span>
-      </div>
-      <div class="diag-list">
-        <div class="diag-item"><span class="led ok"></span> Battery health <span class="status-txt">91% · pass</span></div>
-        <div class="diag-item"><span class="led ok"></span> Charging port <span class="status-txt">pass</span></div>
-        <div class="diag-item"><span class="led warn"></span> Display <span class="status-txt">replacing</span></div>
-        <div class="diag-item"><span class="led ok"></span> Face ID <span class="status-txt">pass</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="trust-badges">
-    <div class="trust-badge"><span class="trust-icon">✅</span> Genuine Products</div>
-    <div class="trust-badge"><span class="trust-icon">🛡️</span> Warranty Included</div>
-    <div class="trust-badge"><span class="trust-icon">🔒</span> Secure Payments</div>
-    <div class="trust-badge"><span class="trust-icon">🚚</span> Fast Delivery</div>
-    <div class="trust-badge"><span class="trust-icon">📦</span> Nationwide Shipping</div>
-  </div>
+  </section>
+  <aside class="hero-services" aria-label="Store services">
+    <a href="{% url 'shop:repairs' %}"><span>🛠️</span><strong>Expert repairs</strong><small>Get a repair ticket today</small></a>
+    <a href="{% url 'shop:track' %}"><span>🚚</span><strong>Track with ease</strong><small>Orders and repair jobs</small></a>
+    <a href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank"><span>💬</span><strong>Need help?</strong><small>Chat with our team</small></a>
+  </aside>
 </section>
 
-<section class="section" style="padding-top:40px;">
+<section class="market-benefits wrap" aria-label="Shopping benefits">
+  <div><span>🚚</span><p><strong>Fast delivery</strong>Across Nigeria</p></div>
+  <div><span>🛡️</span><p><strong>Warranty included</strong>On selected devices</p></div>
+  <div><span>🔒</span><p><strong>Secure payment</strong>Pay safely online</p></div>
+  <div><span>📞</span><p><strong>Real support</strong>Here when you need us</p></div>
+</section>
+
+<section class="section marketplace-categories" style="padding-top:16px;">
   <div class="wrap">
     <div class="cat-strip">
       <a class="cat-card" href="{% url 'shop:shop' %}?category=phone">
@@ -63,25 +95,26 @@
   </div>
 </section>
 
-{% if featured %}
-<section class="section" style="padding-top:0;">
+{% if deals_of_day %}
+<section class="section deal-rail deal-rail-featured" style="padding-top:0;">
   <div class="wrap">
-    <div class="section-head">
-      <div><div class="section-eyebrow">Inventory · Live</div><h2>Featured devices</h2></div>
-      <a href="{% url 'shop:shop' %}" class="btn btn-ghost">View all →</a>
+    <div class="deal-rail-head">
+      <div><span class="deal-rail-kicker">Limited price drops</span><h2>Deals of the day</h2></div>
+      <a href="{% url 'shop:shop' %}">See all <span aria-hidden="true">›</span></a>
     </div>
     <div class="grid">
-      {% for p in featured %}{% include 'shop/_product_card.html' %}{% endfor %}
+      {% for p in deals_of_day %}{% include 'shop/_product_card.html' %}{% endfor %}
     </div>
   </div>
 </section>
 {% endif %}
 
 {% if bestsellers %}
-<section class="section" style="padding-top:0;">
+<section class="section deal-rail" style="padding-top:0;">
   <div class="wrap">
-    <div class="section-head">
-      <div><div class="section-eyebrow">Customer favourites</div><h2>Best sellers</h2></div>
+    <div class="deal-rail-head">
+      <div><span class="deal-rail-kicker">Customer favourites</span><h2>Top selling</h2></div>
+      <a href="{% url 'shop:shop' %}">See all <span aria-hidden="true">›</span></a>
     </div>
     <div class="grid">
       {% for p in bestsellers %}{% include 'shop/_product_card.html' %}{% endfor %}
@@ -90,11 +123,39 @@
 </section>
 {% endif %}
 
-<section class="section" style="padding-top:0;">
+{% if flash_sales %}
+<section class="section deal-rail deal-rail-flash" style="padding-top:0;">
   <div class="wrap">
-    <div class="section-head">
-      <div><div class="section-eyebrow">Just landed</div><h2>New arrivals</h2></div>
-      <a href="{% url 'shop:shop' %}" class="btn btn-ghost">View all →</a>
+    <div class="deal-rail-head">
+      <div><span class="deal-rail-kicker">While stock lasts</span><h2>Flash sales</h2></div>
+      <a href="{% url 'shop:shop' %}">See all <span aria-hidden="true">›</span></a>
+    </div>
+    <div class="grid">
+      {% for p in flash_sales %}{% include 'shop/_product_card.html' %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if recently_viewed %}
+<section class="section deal-rail" style="padding-top:0;">
+  <div class="wrap">
+    <div class="deal-rail-head">
+      <div><span class="deal-rail-kicker">Your browsing history</span><h2>Recently viewed</h2></div>
+      <a href="{% url 'shop:shop' %}">Keep shopping <span aria-hidden="true">›</span></a>
+    </div>
+    <div class="grid">
+      {% for p in recently_viewed %}{% include 'shop/_product_card.html' %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section deal-rail" style="padding-top:0;">
+  <div class="wrap">
+    <div class="deal-rail-head">
+      <div><span class="deal-rail-kicker">Just landed</span><h2>New arrivals</h2></div>
+      <a href="{% url 'shop:shop' %}">See all <span aria-hidden="true">›</span></a>
     </div>
     <div class="grid">
       {% for p in new_arrivals %}{% include 'shop/_product_card.html' %}{% endfor %}
@@ -177,4 +238,41 @@
 </section>
 {% endif %}
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (() => {
+    const carousel = document.querySelector('[data-hero-carousel]');
+    if (!carousel) return;
+    const slides = Array.from(carousel.querySelectorAll('.hero-slide'));
+    const dots = Array.from(carousel.querySelectorAll('[data-hero-dot]'));
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let current = 0;
+    let timer;
+
+    function showSlide(next) {
+      current = (next + slides.length) % slides.length;
+      slides.forEach((slide, index) => {
+        const active = index === current;
+        slide.hidden = !active;
+        slide.classList.toggle('is-active', active);
+        dots[index].setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+    function startRotation() {
+      if (reduceMotion || timer) return;
+      timer = window.setInterval(() => showSlide(current + 1), 6000);
+    }
+    function resetRotation() {
+      window.clearInterval(timer);
+      timer = undefined;
+      startRotation();
+    }
+    carousel.querySelector('[data-hero-prev]').addEventListener('click', () => { showSlide(current - 1); resetRotation(); });
+    carousel.querySelector('[data-hero-next]').addEventListener('click', () => { showSlide(current + 1); resetRotation(); });
+    dots.forEach((dot, index) => dot.addEventListener('click', () => { showSlide(index); resetRotation(); }));
+    startRotation();
+  })();
+</script>
 {% endblock %}

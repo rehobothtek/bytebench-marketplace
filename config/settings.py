@@ -402,6 +402,9 @@ SITE_TAGLINE = 'Something Different'
 # on, so local browsing and the test suite need no configuration.
 SITE_URL = os.environ.get('SITE_URL', '').strip().rstrip('/')
 WHATSAPP_NUMBER = os.environ.get('WHATSAPP_NUMBER', '2348113956538')
+# Kept separate from WhatsApp so the two destinations can be changed
+# independently later. The current business number is intentionally the same.
+SMS_NUMBER = os.environ.get('SMS_NUMBER', '2348113956538')
 SITE_EMAIL = os.environ.get('SITE_EMAIL', 'observernathan124@gmail.com')
 TELEGRAM_USERNAME = os.environ.get('TELEGRAM_USERNAME', 'rehobothtek')
 ADMIN_NOTIFY_EMAIL = os.environ.get('ADMIN_NOTIFY_EMAIL', SITE_EMAIL)

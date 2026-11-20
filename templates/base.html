@@ -36,30 +36,25 @@
 <body>
 
 <header>
+  <div class="market-topbar">
+    <div class="wrap"><span>Gadgets, accessories &amp; honest repairs</span><a href="{% url 'shop:track' %}">Track an order or repair</a></div>
+  </div>
   <div class="nav wrap">
     <a class="logo" href="{% url 'shop:home' %}">
       <img src="{% static 'images/logo-mark-256.png' %}" alt="RehoBothTek logo">
       <span class="logo-name">{{ SITE_NAME }}</span>
     </a>
-    <nav class="navlinks">
-      <a href="{% url 'shop:shop' %}">Shop</a>
-      <a href="{% url 'shop:repairs' %}">Repairs</a>
-      <a href="{% url 'shop:track' %}">Track</a>
-      <a href="{% url 'shop:about' %}">About</a>
-      <a href="{% url 'shop:contact' %}">Contact</a>
-      {% if user.is_authenticated %}
-      <a href="{% url 'shop:account' %}">Account</a>
-      <a href="{% url 'shop:order_history' %}">My Orders</a>
-      <form method="post" action="{% url 'logout' %}" class="nav-logout-form">
-        {% csrf_token %}
-        <button type="submit" class="link-btn">Logout</button>
-      </form>
-      {% else %}
-      <a href="{% url 'login' %}">Login</a>
-      <a href="{% url 'shop:register' %}">Register</a>
-      {% endif %}
-    </nav>
+    <form action="{% url 'shop:shop' %}" method="get" class="market-search" role="search">
+      <label class="sr-only" for="siteSearch">Search products</label>
+      <input id="siteSearch" name="q" type="search" placeholder="Search phones, laptops, accessories...">
+      <button type="submit">Search</button>
+    </form>
     <div class="nav-right">
+      {% if user.is_authenticated %}
+      <a class="account-link" href="{% url 'shop:account' %}"><span>👤</span><span>Account</span></a>
+      {% else %}
+      <a class="account-link" href="{% url 'login' %}"><span>👤</span><span>Sign in</span></a>
+      {% endif %}
       <a class="icon-btn" href="{% url 'shop:compare_detail' %}" aria-label="Compare list">⇄<span class="cart-count" id="compareCount">{{ compare_count }}</span></a>
       <a class="icon-btn" href="{% url 'shop:wishlist_detail' %}" aria-label="Wishlist">♥<span class="cart-count" id="wishlistCount">{{ wishlist_count }}</span></a>
       <a class="cart-btn" href="{% url 'shop:cart_detail' %}"><span>🛒</span><span class="cart-label">Cart</span><span class="cart-count" id="cartCount">{{ cart_count }}</span></a>
@@ -68,6 +63,17 @@
       </button>
     </div>
   </div>
+  <nav class="market-categories" aria-label="Product categories">
+    <div class="wrap">
+      <a href="{% url 'shop:shop' %}">All products</a>
+      <a href="{% url 'shop:shop' %}?category=phone">Phones</a>
+      <a href="{% url 'shop:shop' %}?category=laptop">Laptops</a>
+      <a href="{% url 'shop:shop' %}?category=accessory">Accessories</a>
+      <a href="{% url 'shop:shop' %}?category=gaming">Gaming</a>
+      <a href="{% url 'shop:repairs' %}">Repairs</a>
+      <a href="{% url 'shop:contact' %}">Help &amp; contact</a>
+    </div>
+  </nav>
   <nav class="mobile-nav" id="mobileNav">
     <a href="{% url 'shop:shop' %}">Shop</a>
     <a href="{% url 'shop:repairs' %}">Repairs</a>

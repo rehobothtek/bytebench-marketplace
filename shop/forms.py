@@ -55,12 +55,20 @@ class ContactForm(forms.ModelForm):
         model = ContactMessage
         fields = ['name', 'email', 'phone_number', 'message']
         widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Your name'}),
-            'email': forms.EmailInput(attrs={'placeholder': 'you@example.com'}),
-            'phone_number': forms.TextInput(attrs={'placeholder': 'Optional'}),
+            'name': forms.TextInput(attrs={'placeholder': 'Your name', 'autocomplete': 'name'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'you@example.com', 'autocomplete': 'email'}),
+            'phone_number': forms.TextInput(attrs={'placeholder': 'e.g. 0803 123 4567', 'autocomplete': 'tel'}),
             'message': forms.Textarea(attrs={'rows': 5, 'placeholder': 'How can we help?'}),
         }
-        labels = {'phone_number': 'Phone (optional)'}
+        labels = {
+            'phone_number': 'Phone / WhatsApp number',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # A reply email is essential for this email-only contact flow. The
+        # database permits an empty address only to preserve older records.
+        self.fields['email'].required = True
 
 
 class TrackForm(forms.Form):

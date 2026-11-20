@@ -403,10 +403,22 @@ class CompareItem(models.Model):
 
 
 class ContactMessage(models.Model):
+    CHANNEL_EMAIL = 'email'
+    CHANNEL_WHATSAPP = 'whatsapp'
+    CHANNEL_SMS = 'sms'
+    CONTACT_CHANNEL_CHOICES = [
+        (CHANNEL_EMAIL, 'Email'),
+        (CHANNEL_WHATSAPP, 'WhatsApp'),
+        (CHANNEL_SMS, 'SMS / text message'),
+    ]
+
     name = models.CharField(max_length=150)
     email = models.EmailField(blank=True)
     phone_number = models.CharField(max_length=30, blank=True)
     message = models.TextField()
+    contact_channel = models.CharField(
+        max_length=12, choices=CONTACT_CHANNEL_CHOICES, default=CHANNEL_EMAIL,
+        help_text='How the customer chose to send this message.')
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

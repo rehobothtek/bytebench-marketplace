@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.http import JsonResponse
+from django.db.models import F
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
@@ -25,8 +26,33 @@ RECENTLY_VIEWED_SESSION_KEY = 'recently_viewed'
 RECENTLY_VIEWED_MAX = 8
 
 
+class SmsRedirect(HttpResponseRedirect):
+    """Django intentionally blocks non-web redirect schemes by default.
+
+    This view builds the destination from our own configured business number
+    and URL-encodes the saved message, so permitting the standard ``sms:``
+    scheme here is narrowly scoped to the contact form flow.
+    """
+    allowed_schemes = ['http', 'https', 'ftp', 'sms']
+
+
 def whatsapp_link(message: str) -> str:
     return f'https://wa.me/{settings.WHATSAPP_NUMBER}?text={quote(message)}'
+
+
+def contact_delivery_text(msg: ContactMessage) -> str:
+    """Create the text that WhatsApp or SMS pre-fills for the customer.
+
+    The form is saved before a messaging app is opened. A browser cannot safely
+    send a WhatsApp or SMS message silently, so the customer makes the final
+    send explicit in their own app.
+    """
+    return (
+        f'Website message from {msg.name}\n'
+        f'Email: {msg.email or "Not provided"}\n'
+        f'Phone: {msg.phone_number or "Not provided"}\n\n'
+        f'{msg.message}'
+    )
 
 
 def _card_context(request):
@@ -46,12 +72,34 @@ def home(request):
         featured = Product.objects.filter(is_active=True).with_rating_stats()[:6]
     bestsellers = Product.objects.filter(is_active=True, is_bestseller=True).with_rating_stats()[:6]
     new_arrivals = Product.objects.filter(is_active=True).order_by('-created_at').with_rating_stats()[:6]
+    # A real deal always has a higher previous price. Pull a small fixed set
+    # once, then divide it into the two homepage rails without an N+1 query.
+    discounted = list(
+        Product.objects.filter(is_active=True, compare_at_price__gt=F('price'))
+        .order_by('-created_at').with_rating_stats()[:10]
+    )
+    deals_of_day = discounted[:5]
+    flash_sales = discounted[5:10] or deals_of_day
+
+    recently_viewed_ids = request.session.get(RECENTLY_VIEWED_SESSION_KEY, [])
+    recently_viewed_map = {
+        str(product.id): product
+        for product in Product.objects.filter(
+            id__in=recently_viewed_ids, is_active=True).with_rating_stats()
+    }
+    recently_viewed = [
+        recently_viewed_map[product_id]
+        for product_id in recently_viewed_ids
+        if product_id in recently_viewed_map
+    ][:5]
     repair_types = RepairType.objects.filter(is_active=True)[:4]
     testimonials = Testimonial.objects.filter(is_active=True)[:6]
     faqs = FAQ.objects.filter(is_active=True)
 
     return render(request, 'shop/home.html', {
         'featured': featured, 'bestsellers': bestsellers, 'new_arrivals': new_arrivals,
+        'deals_of_day': deals_of_day, 'flash_sales': flash_sales,
+        'recently_viewed': recently_viewed,
         'repair_types': repair_types, 'testimonials': testimonials, 'faqs': faqs,
         **_card_context(request),
     })
@@ -478,9 +526,23 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            msg = form.save()
-            notify_new_contact_message(msg)
-            messages.success(request, "Thanks — we've got your message and will reply soon.")
+            msg = form.save(commit=False)
+            # WhatsApp and SMS integrations will be added separately; until
+            # then every web enquiry is delivered to the owner's email inbox.
+            msg.contact_channel = ContactMessage.CHANNEL_EMAIL
+            msg.save()
+            email_sent = notify_new_contact_message(msg)
+            if settings.EMAIL_BACKEND == 'django.core.mail.backends.console.EmailBackend':
+                messages.warning(
+                    request,
+                    "Thanks — your message was saved, but email delivery has not been configured yet.")
+            elif email_sent:
+                messages.success(request, "Thanks — your message has been sent. We'll reply by email soon.")
+            else:
+                messages.warning(
+                    request,
+                    "Thanks — your message was saved. We're having trouble sending the email notification, "
+                    "but the team can still see it in the contact inbox.")
             return redirect('shop:contact')
     else:
         form = ContactForm()

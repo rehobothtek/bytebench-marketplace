@@ -12,8 +12,9 @@ logger = logging.getLogger(__name__)
 
 def _send(subject, body):
     try:
-        send_mail(subject=subject, message=body, from_email=settings.DEFAULT_FROM_EMAIL,
-                   recipient_list=[settings.ADMIN_NOTIFY_EMAIL], fail_silently=False)
+        sent = send_mail(subject=subject, message=body, from_email=settings.DEFAULT_FROM_EMAIL,
+                         recipient_list=[settings.ADMIN_NOTIFY_EMAIL], fail_silently=False)
+        return sent == 1
     except Exception as exc:
         # Logged at ERROR (logger.exception includes the traceback) with enough
         # context to diagnose a broken mail setup from the logs alone: which
@@ -24,6 +25,7 @@ def _send(subject, body):
             'Notification email failed — subject=%r to=%s (%s: %s)',
             subject, settings.ADMIN_NOTIFY_EMAIL, type(exc).__name__, exc,
         )
+        return False
 
 
 def notify_new_order(order):
@@ -39,7 +41,7 @@ def notify_new_order(order):
         f'Items:\n{lines}\n\nTotal: ₦{order.total():,.0f}\n\n'
         f'View/manage: /admin/shop/order/{order.id}/change/'
     )
-    _send(f'New order #{order.id} — ₦{order.total():,.0f}', body)
+    return _send(f'New order #{order.id} — ₦{order.total():,.0f}', body)
 
 
 def notify_new_repair_booking(booking):
@@ -49,16 +51,17 @@ def notify_new_repair_booking(booking):
         f'Device: {booking.device}\nRepair type: {booking.repair_type}\nPreferred time: {booking.preferred_time}\n'
         f'Issue: {booking.issue_description}\n\nView/manage: /admin/shop/repairbooking/{booking.id}/change/'
     )
-    _send(f'New repair booking {booking.ticket_number}', body)
+    return _send(f'New repair booking {booking.ticket_number}', body)
 
 
 def notify_new_contact_message(msg):
     body = (
         f'New contact form message on {settings.SITE_NAME}\n\n'
-        f'From: {msg.name}\nEmail: {msg.email}\nPhone: {msg.phone_number}\n\n'
+        f'From: {msg.name}\nEmail: {msg.email or "Not provided"}\nPhone: {msg.phone_number or "Not provided"}\n'
+        f'Customer chose: {msg.get_contact_channel_display()}\n\n'
         f'Message:\n{msg.message}\n\nView/manage: /admin/shop/contactmessage/{msg.id}/change/'
     )
-    _send(f'New message from {msg.name}', body)
+    return _send(f'New message from {msg.name}', body)
 
 
 def notify_oversold_order(order, item_names):
@@ -78,4 +81,4 @@ def notify_oversold_order(order, item_names):
         f'Customer: {order.customer_name}\nEmail: {order.email}\nPhone: {order.phone_number}\n\n'
         f'View/manage: /admin/shop/order/{order.id}/change/'
     )
-    _send(f'⚠️ ACTION NEEDED: Order #{order.id} oversold after payment', body)
+    return _send(f'⚠️ ACTION NEEDED: Order #{order.id} oversold after payment', body)
