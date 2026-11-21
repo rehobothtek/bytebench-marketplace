@@ -224,6 +224,12 @@ DEBUG = env_bool('DEBUG', default=True)
 # on spoofed Host headers.
 _allowed_hosts = os.environ.get('ALLOWED_HOSTS', '*')
 ALLOWED_HOSTS = [h.strip() for h in _allowed_hosts.split(',') if h.strip()]
+# Render provides the generated public hostname at runtime. Include it
+# automatically so Blueprint-created services remain valid even when Render
+# adds a suffix to the service name.
+_render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME', '').strip()
+if _render_hostname and _render_hostname not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(_render_hostname)
 
 # --- Apps --------------------------------------------------------------------
 INSTALLED_APPS = [
